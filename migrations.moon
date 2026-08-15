@@ -13,29 +13,17 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-config = require "lapis.config"
+db = require "lapis.db"
+import create_table, create_index, types from require "lapis.db.schema"
 
-local db_host, db_user, db_password, db_database
-
-unless db_host = os.getenv "DB_HOST"
-  print "DB_HOST is not set"
-  os.exit 1
-unless db_user = os.getenv "DB_USER"
-  print "DB_USER is not set"
-  os.exit 1
-unless db_password = os.getenv "DB_PASSWORD"
-  print "DB_PASSWORD is not set"
-  os.exit 1
-unless db_database = os.getenv "DB_DATABASE"
-  print "DB_DATABASE is not set"
-  os.exit 1
-
-config "development",
-  server: "nginx"
-  code_cache: "off"
-  num_workers: "1"
-  mysql:
-    host: db_host
-    user: db_user
-    password: db_password
-    database: db_database
+{
+  [1786833964]: =>
+    create_table "users", {
+      { "id", types.id },
+      { "email", types.varchar },
+      { "password", types.varchar },
+      { "created_at", types.datetime },
+      { "updated_at", types.datetime },
+    }
+    create_index "users", "email", unique: true
+}
