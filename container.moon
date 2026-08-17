@@ -13,12 +13,26 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-lapis = require "lapis"
-container = require "container"
+import create_container from require "injection"
 
-class extends lapis.Application
-  get_container: =>
-    container
+resty_http = require "lapis.nginx.resty_http"
+models = require "models"
 
-  "/": =>
-    "Welcome to Lapis #{require "lapis.version"}!"
+container = create_container!
+
+with container
+  \put "models",
+    ->
+      models
+  
+  \put "http_client",
+    ->
+      resty_http
+
+  \put "crypto_service", 
+    (http_client) ->
+      CryptoService = require "services.crypto"
+      CryptoService http_client, 
+    { "http_client" }
+
+container

@@ -14,4 +14,7 @@
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
 class Crypto
-  -- TODO: Figure out how to get http clients working with resty lol
+  new: (@http_client) =>
+
+  generate_salt: =>
+
