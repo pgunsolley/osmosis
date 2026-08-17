@@ -15,7 +15,11 @@
 
 config = require "lapis.config"
 
-local db_host, db_user, db_password, db_database
+local port, db_host, db_user, db_password, db_database
+
+port = os.getenv "PORT" or "8080"
+
+print "Starting on port #{port}"
 
 unless db_host = os.getenv "DB_HOST"
   print "DB_HOST is not set"
@@ -32,6 +36,7 @@ unless db_database = os.getenv "DB_DATABASE"
 
 config "development",
   server: "nginx"
+  :port
   code_cache: "off"
   num_workers: "1"
   mysql:
