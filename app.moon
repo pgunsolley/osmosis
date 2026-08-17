@@ -17,8 +17,9 @@ lapis = require "lapis"
 container = require "container"
 
 class extends lapis.Application
-  get_container: =>
+  get_container: ->
     container
 
   "/": =>
-    "Welcome to Lapis #{require "lapis.version"}!"
+    config = @app.get_container!.find "config"
+    config.uport

@@ -14,10 +14,15 @@
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
 import create_container from require "injection"
+config = require "lapis.config"
 
 container = create_container!
 with container
-  .put "config", -> require "config"
+  .put "config", ->
+    c = config.get!
+    setmetatable {},
+      __index: (t, k) ->
+        c[k] or error "config key #{k} is not set"
 
   .put "models", -> require "models"
 
@@ -25,10 +30,8 @@ with container
 
   .put "crypto_service",
     (config, http_client) ->
-      crypto_host = config.get "crypto_host"
-      crypto_port = config.get "crypto_port"
       CryptoService = require "services.crypto"
-      CryptoService http_client, crypto_host, crypto_port,
+      CryptoService http_client, config.crypto_host, config.crypto_port,
     { "config", "http_client" }
 
 container
