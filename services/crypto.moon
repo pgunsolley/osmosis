@@ -13,11 +13,11 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-class Crypto
+class CryptoService
   new: (@http_client, @host, @port) =>
 
   _handle_request: (url, str_body) =>
-    
+    -- TODO: Implement
 
   argon2_hash_encoded: (value) =>
     -- TODO: Validate value before transport

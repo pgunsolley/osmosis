@@ -13,12 +13,6 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
--- Define all consumable env vars
--- Definition:
---  env - The env var
---  ?default - The default value if unset
---  ?on_fail - A function that is called when an env var is unset and has no default
---  ?on_success - A function that is called with the value when an env var is loaded 
 env_config = {
   {
     env: "PORT"
@@ -54,21 +48,25 @@ for conf in *env_config
       conf.on_fail!
     else
       print "#{conf.env} is not set"
+
     print "Exiting"
     os.exit 1
+
+  env[string.lower conf.env] = val
   if type(conf.on_success) == "function"
     conf.on_success val
-  env[string.lower conf.env] = val
 
-config = require "lapis.config"
-
-config "development",
+lapis_config = require "lapis.config"
+lapis_config "development",
   server: "nginx"
   code_cache: "off"
   num_workers: "1"
-  :env
+  port: env.port
+  crypto_host: env.crypto_host
+  crypto_port: env.crypto_port
   mysql:
-    host: db_host
-    user: db_user
-    password: db_password
-    database: db_database
+    host: env.db_host
+    user: env.db_user
+    password: env.db_password
+    database: env.db_database
+

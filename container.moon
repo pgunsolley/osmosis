@@ -13,26 +13,22 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-config = require "config"
 import create_container from require "injection"
 
 container = create_container!
-
 with container
-  .put "models",
-    ->
-      require "models"
-  
-  .put "http_client",
-    ->
-      require "lapis.nginx.resty_http"
+  .put "config", -> require "config"
 
-  .put "crypto_service", 
-    (http_client) ->
-      host = config.get "crypto_host"
-      port = config.get "crypto_port"
+  .put "models", -> require "models"
+
+  .put "http_client", -> require "lapis.nginx.resty_http"
+
+  .put "crypto_service",
+    (config, http_client) ->
+      crypto_host = config.get "crypto_host"
+      crypto_port = config.get "crypto_port"
       CryptoService = require "services.crypto"
-      CryptoService http_client, host, port,
-    { "http_client" }
+      CryptoService http_client, crypto_host, crypto_port,
+    { "config", "http_client" }
 
 container
