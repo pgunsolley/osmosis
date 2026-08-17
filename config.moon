@@ -13,32 +13,39 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-config = require "lapis.config"
+port              = os.getenv "PORT"            or "8080"
+db_host           = os.getenv "DB_HOST"
+db_user           = os.getenv "DB_USER"
+db_password       = os.getenv "DB_PASSWORD"
+db_database       = os.getenv "DB_DATABASE"
+crypto_base_url   = os.getenv "CRYPTO_BASE_URL"
 
-local port, db_host, db_user, db_password, db_database
+print "Using port #{port}"
 
-port = os.getenv "PORT" or "8080"
-
-print "Starting on port #{port}"
-
-unless db_host = os.getenv "DB_HOST"
+unless db_host
   print "DB_HOST is not set"
   os.exit 1
-unless db_user = os.getenv "DB_USER"
+
+unless db_user
   print "DB_USER is not set"
   os.exit 1
-unless db_password = os.getenv "DB_PASSWORD"
+
+unless db_password
   print "DB_PASSWORD is not set"
   os.exit 1
-unless db_database = os.getenv "DB_DATABASE"
+
+unless db_database
   print "DB_DATABASE is not set"
   os.exit 1
+
+config = require "lapis.config"
 
 config "development",
   server: "nginx"
   :port
   code_cache: "off"
   num_workers: "1"
+  :crypto_base_url
   mysql:
     host: db_host
     user: db_user

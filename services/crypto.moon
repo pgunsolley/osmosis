@@ -14,7 +14,8 @@
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
 class Crypto
-  new: (@http_client) =>
+  new: (@base_url, @http_client) =>
 
-  generate_salt: =>
+  argon2_hash_encode: (value) =>
+    "Not implemented"
 
