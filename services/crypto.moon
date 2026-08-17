@@ -14,8 +14,14 @@
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
 class Crypto
-  new: (@base_url, @http_client) =>
+  new: (@http_client, @host, @port) =>
 
-  argon2_hash_encode: (value) =>
-    "Not implemented"
+  _handle_request: (url, str_body) =>
+    
 
+  argon2_hash_encoded: (value) =>
+    -- TODO: Validate value before transport
+    -- TODO: Make request
+    -- TODO: validate response
+    -- TODO: Return value|nil, error_message?
+    res, status, headers = @http_client @base_url 

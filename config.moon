@@ -13,39 +13,60 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-port              = os.getenv "PORT"            or "8080"
-db_host           = os.getenv "DB_HOST"
-db_user           = os.getenv "DB_USER"
-db_password       = os.getenv "DB_PASSWORD"
-db_database       = os.getenv "DB_DATABASE"
-crypto_base_url   = os.getenv "CRYPTO_BASE_URL"
+-- Define all consumable env vars
+-- Definition:
+--  env - The env var
+--  ?default - The default value if unset
+--  ?on_fail - A function that is called when an env var is unset and has no default
+--  ?on_success - A function that is called with the value when an env var is loaded 
+env_config = {
+  {
+    env: "PORT"
+    default: "8080"
+    on_success: (port) ->
+      print "Using port #{port}"
+  },
+  {
+    env: "DB_HOST"
+  },
+  {
+    env: "DB_USER"
+  },
+  {
+    env: "DB_PASSWORD"
+  },
+  {
+    env: "DB_DATABASE"
+  },
+  {
+    env: "CRYPTO_HOST"
+  },
+  {
+    env: "CRYPTO_PORT"
+  }
+}
 
-print "Using port #{port}"
-
-unless db_host
-  print "DB_HOST is not set"
-  os.exit 1
-
-unless db_user
-  print "DB_USER is not set"
-  os.exit 1
-
-unless db_password
-  print "DB_PASSWORD is not set"
-  os.exit 1
-
-unless db_database
-  print "DB_DATABASE is not set"
-  os.exit 1
+env = {}
+for conf in *env_config
+  val = os.getenv(conf.env) or conf.default
+  if val == nil
+    if type(conf.on_fail) == "function"
+      conf.on_fail!
+    else
+      print "#{conf.env} is not set"
+    print "Exiting"
+    os.exit 1
+  if type(conf.on_success) == "function"
+    conf.on_success val
+  env[string.lower conf.env] = val
 
 config = require "lapis.config"
 
 config "development",
   server: "nginx"
-  :port
   code_cache: "off"
   num_workers: "1"
-  :crypto_base_url
+  :env
   mysql:
     host: db_host
     user: db_user

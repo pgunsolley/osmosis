@@ -29,9 +29,10 @@ with container
 
   .put "crypto_service", 
     (http_client) ->
-      base_url = config.get "crypto_base_url"
+      host = config.get "crypto_host"
+      port = config.get "crypto_port"
       CryptoService = require "services.crypto"
-      CryptoService base_url, http_client, 
+      CryptoService http_client, host, port,
     { "http_client" }
 
 container
