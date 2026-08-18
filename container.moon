@@ -47,9 +47,10 @@ with container
 
   .put "user_service",
     (models) ->
+      import Users from models
       UserService = require "services.user_service"
       UserService.create {
-        users_model: models.Users
+        :Users
       },
     { "models" }
 
