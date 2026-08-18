@@ -37,4 +37,10 @@ with container
       crypto http_client, config.crypto_host, config.crypto_port,
     { "config", "http_client" }
 
+  .put "users",
+    (models) ->
+      users = require "services.users"
+      users models.Users,
+    { "models" }
+
 container

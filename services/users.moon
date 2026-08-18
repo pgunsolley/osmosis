@@ -13,6 +13,10 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-import Application from require "lapis"
+import validate_email from require "validators"
 
-class extends Application
+email_validator = validate_email!
+
+(users_model) ->
+  create: (email, password) ->
+    "Not implemented"
