@@ -13,17 +13,22 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-(http_client, host, port) ->
-  argon2_hash_encoded: (value) =>
-    req =
-      method: "POST"
-      headers: 
-        ["Content-Type"]: 'application/json'
-        Accept: 'application/json'
-      url: "#{host}:#{port}/argon2/hash-encoded"
-      body: :value
+import from_json from require "lapis.util"
 
-    res = http_client.request req
-    unless res.status == 200
-      return nil, res.body.reason or "Response not 200"
-    res.body
+-- Attempts to parse body into table or returns string body
+body_parser = (body, headers) ->
+  switch headers['Content-Type']
+    when 'application/json'
+      from_json body
+    else body
+
+HttpService = {}
+
+-- Wrap lapis.nginx.resty_http
+HttpService.create = ({ :resty_http }) ->
+  request: (req) ->
+    body, status, headers = resty_http.request req
+    body = body_parser body, headers
+    { :body, :status, :headers }
+
+HttpService

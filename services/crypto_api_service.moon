@@ -13,22 +13,20 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-import from_json from require "lapis.util"
+CryptoApiService = {}
 
--- Attempts to parse body into table or returns string body
-body_parser = (body, headers) ->
-  switch headers['Content-Type']
-    when 'application/json'
-      from_json body
-    else body
+CryptoApiService.create = ({ :http_service, :host, :port }) ->
+  argon2_hash_encoded: (value) ->
+    req =
+      method: "POST"
+      headers: 
+        ["Content-Type"]: 'application/json'
+        Accept: 'application/json'
+      url: "#{host}:#{port}/argon2/hash-encoded"
+      body: :value
+    res = http_service.request req
+    unless res.status == 200
+      return nil, res.body.reason or "Response not 200"
+    res.body
 
-http_client = {}
-
--- Wrap lapis.nginx.resty_http
-http_client.from_resty_http = (resty_http) ->
-  request: (req) ->
-    body, status, headers = resty_http.request req
-    body = body_parser body, headers
-    { :body, :status, :headers }
-
-http_client
+CryptoApiService

@@ -26,21 +26,31 @@ with container
 
   .put "models", -> require "models"
 
-  .put "http_client", ->
+  .put "http_service", ->
     resty_http = require "lapis.nginx.resty_http"
-    import from_resty_http from require "services.http_client"
-    from_resty_http resty_http
+    HttpService = require "services.http_service"
+    HttpService.create {
+      :resty_http
+    }
 
-  .put "crypto",
-    (config, http_client) ->
-      crypto = require "services.crypto"
-      crypto http_client, config.crypto_host, config.crypto_port,
-    { "config", "http_client" }
+  .put "crypto_api_service",
+    (config, http_service) ->
+      host = config.crypto_host
+      port = config.crypto_port
+      CryptoApiService = require "services.crypto_api_service"
+      CryptoApiService.create {
+        :http_service
+        :host
+        :port
+      },
+    { "config", "http_service" }
 
-  .put "users",
+  .put "user_service",
     (models) ->
-      users = require "services.users"
-      users models.Users,
+      UserService = require "services.user_service"
+      UserService.create {
+        users_model: models.Users
+      },
     { "models" }
 
 container

@@ -17,6 +17,10 @@ import validate_email from require "validators"
 
 email_validator = validate_email!
 
-(users_model) ->
+UserService = {}
+
+UserService.create = ({ :users_model }) ->
   create: (email, password) ->
     "Not implemented"
+
+UserService
