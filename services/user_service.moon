@@ -21,7 +21,7 @@ password_validator = validate_password!
 UserService = {}
 
 UserService.create = ({ :Users }) ->
-  create: (email, password) ->
+  create: ({ :email, :password }) ->
     email_valid, email_err = email_validator email
     unless email_valid
       return email_valid, email_err

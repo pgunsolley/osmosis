@@ -26,7 +26,7 @@ HttpService = {}
 
 -- Wrap lapis.nginx.resty_http
 HttpService.create = ({ :resty_http }) ->
-  request: (req) ->
+  request: ({ :req }) ->
     body, status, headers = resty_http.request req
     body = body_parser body, headers
     { :body, :status, :headers }
