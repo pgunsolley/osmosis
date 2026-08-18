@@ -13,19 +13,17 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-class CryptoService
-  new: (@http_client, @host, @port) =>
-
+(http_client, host, port) ->
   argon2_hash_encoded: (value) =>
     req =
       method: "POST"
       headers: 
         ["Content-Type"]: 'application/json'
         Accept: 'application/json'
-      url: "#{@host}:#{@port}/argon2/hash-encoded"
+      url: "#{host}:#{port}/argon2/hash-encoded"
       body: :value
 
-    res = @http_client.request req
+    res = http_client.request req
     unless res.status == 200
       return nil, res.body.reason or "Response not 200"
     res.body

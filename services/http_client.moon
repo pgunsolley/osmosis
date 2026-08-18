@@ -13,12 +13,22 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
+import from_json from require "lapis.util"
+
+-- Attempts to parse body into table or returns string body
+body_parser = (body, headers) ->
+  switch headers['Content-Type']
+    when 'application/json'
+      from_json body
+    else body
+
 http_client = {}
 
 -- Wrap lapis.nginx.resty_http
 http_client.from_resty_http = (resty_http) ->
   request: (req) ->
     body, status, headers = resty_http.request req
+    body = body_parser body, headers
     { :body, :status, :headers }
 
 http_client

@@ -31,10 +31,10 @@ with container
     import from_resty_http from require "services.http_client"
     from_resty_http resty_http
 
-  .put "crypto_service",
+  .put "crypto",
     (config, http_client) ->
-      CryptoService = require "services.crypto"
-      CryptoService http_client, config.crypto_host, config.crypto_port,
+      crypto = require "services.crypto"
+      crypto http_client, config.crypto_host, config.crypto_port,
     { "config", "http_client" }
 
 container
