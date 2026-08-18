@@ -17,9 +17,7 @@ lapis = require "lapis"
 container = require "container"
 
 class extends lapis.Application
-  get_container: ->
-    container
-
   "/": =>
-    config = @app.get_container!.find "config"
-    config.uport
+    config = container.find "config"
+    -- Output test str
+    "Osmosis running on port #{config.port}"
