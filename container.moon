@@ -14,11 +14,11 @@
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
 import create_container from require "injection"
-config = require "lapis.config"
 
 container = create_container!
 with container
   .put "config", ->
+    config = require "lapis.config"
     c = config.get!
     setmetatable {},
       __index: (t, k) ->
@@ -26,7 +26,10 @@ with container
 
   .put "models", -> require "models"
 
-  .put "http_client", -> require "lapis.nginx.resty_http"
+  .put "http_client", ->
+    resty_http = require "lapis.nginx.resty_http"
+    import from_resty_http from require "services.http_client"
+    from_resty_http resty_http
 
   .put "crypto_service",
     (config, http_client) ->
