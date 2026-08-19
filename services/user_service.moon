@@ -13,23 +13,30 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-import validate_email, validate_password from require "validators"
+validators = require "validators"
 
-email_validator = validate_email!
-password_validator = validate_password!
+email_validator = validators.email!
+password_validator = validators.password!
+id_validator = validators.id!
 
 UserService = {}
 
 UserService.create = ({ :Users }) ->
   create: ({ :email, :password }) ->
-    email_valid, email_err = email_validator email
-    unless email_valid
-      return email_valid, email_err
-    password_valid, password_err = password_validator password
+    valid_email, email_validator_err = email_validator email
+    unless valid_email
+      return valid_email, email_validator_err
+    valid_password, password_validator_err = password_validator password
     unless password_valid
-      return password_valid, password_err
+      return valid_password, password_validator_err
     Users\create
       :email
       :password
+
+  get: ({ :id }) ->
+    valid_id, id_validator_err = id_validator id
+    unless valid_id
+      return valid_id, id_validator_err
+    Users\find :id
 
 UserService
