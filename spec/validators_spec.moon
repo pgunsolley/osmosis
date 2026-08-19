@@ -186,7 +186,38 @@ describe "validators.lua", ->
     before_each ->
       email_validator = validators.email!
 
-    it "should return true when called with 'foobar@mail.com'", ->
-      result = email_validator "foobar@mail.com"
+    it "should return true when called with 'foobar420@mail.com'", ->
+      result = email_validator "foobar420@mail.com"
       assert.is_true result
 
+    it "should return true when called with 'foo.bar420@mail.com'", ->
+      result = email_validator "foo.bar420@mail.com"
+      assert.is_true result
+
+    it "should return true when called with 'foo+bar420@e-mail.com'", ->
+      result = email_validator "foo+bar420@e-mail.com"
+      assert.is_true result
+
+    it "should return true when called with 'foo_bar420@mail.com'", ->
+      result = email_validator "foo_bar420@mail.com"
+      assert.is_true result
+
+    it "should return true when called with 'foo.bar.baz@mail.com'", ->
+      result = email_validator "foo.bar.baz@mail.com"
+      assert.is_true result
+
+    it "should return true when called with 'e@mail.com", ->
+      result = email_validator "e@mail.com"
+      assert.is_true result
+
+    it "should return false when called with 'foo..bar@mail.com'", ->
+      result = email_validator "foo..bar@mail.com"
+      assert.is_false result
+
+    it "should return false when called with 'foobar'", ->
+      result = email_validator "foobar"
+      assert.is_false result
+
+    it "should return false when called with 'foobar.com'", ->
+      result = email_validator "foobar.com"
+      assert.is_false result
