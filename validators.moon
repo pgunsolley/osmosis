@@ -96,7 +96,6 @@ validators.ipv4 = ->
     for octet in *octets
       if #octet > 1 and octet\sub(1, 1) == "0"
         return false, "Octet cannot have leading zeros"
-
       num = tonumber octet
       if not num or num < 0 or num > 255
         return false, "Number is out of range (0 - 255)"
