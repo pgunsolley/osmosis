@@ -16,6 +16,8 @@
 CryptoApiService = {}
 
 CryptoApiService.create = ({ :http_service, :host, :port }) ->
+  -- TODO: Define validation for arguments
+
   argon2_hash_encoded: ({ :value }) ->
     req =
       method: "POST"

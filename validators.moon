@@ -83,4 +83,31 @@ validators.password = ({ :min_length, :max_length } = {}) ->
   (value) ->
     string_validator value
 
+validators.ipv4 = ->
+  string_validator = validators.string!
+  (value) ->
+    valid_string, string_validator_err = string_validator value
+    unless valid_string
+      return valid_string, string_validator_err
+    o1, o2, o3, o4 = value\match "^(%d+)%.(%d+)%.(%d+)%.(%d+)$"
+    unless o1
+      return false, "Invalid segment"
+    octets = {o1, o2, o3, o4}
+    for octet in *octets
+      if #octet > 1 and octet\sub(1, 1) == "0"
+        return false, "Octet cannot have leading zeros"
+
+      num = tonumber octet
+      if not num or num < 0 or num > 255
+        return false, "Number is out of range (0 - 255)"
+    true
+
+validators.port = ->
+  (value) ->
+    error "Not implemented"
+
+validators.tableshape = ->
+  (value) ->
+    error "Not implemented"
+
 validators

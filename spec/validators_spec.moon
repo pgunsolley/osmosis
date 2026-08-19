@@ -273,3 +273,28 @@ describe "validators.lua", ->
     it "should return true when called with 'foobar'", ->
       result = password_validator "foobar"
       assert.is_true result
+
+  describe "ipv4()", ->
+    local ipv4_validator
+    before_each ->
+      ipv4_validator = validators.ipv4!
+
+    it "should return true when called with '0.0.0.0'", ->
+      result = ipv4_validator "0.0.0.0"
+      assert.is_true result
+
+    it "should return true when called with '255.255.255.255'", ->
+      result = ipv4_validator "127.100.10.1"
+      assert.is_true result
+
+    it "should return false when called with '011.111.111.111'", ->
+      result = ipv4_validator "011.111.111.111"
+      assert.is_false result
+
+    it "should return false when called with '256.1.1.1'", ->
+      result = ipv4_validator "256.1.1.1"
+      assert.is_false result
+
+    it "should return false when called with 'foo'", ->
+      result = ipv4_validator "foo"
+      assert.is_false result
