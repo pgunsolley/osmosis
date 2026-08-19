@@ -105,15 +105,7 @@ validators.port = ->
   int_validator = validators.int
     min_length: 0
     max_length: 65535
-    signed: false
   (value) ->
-    valid_int, int_validator_err = int_validator tonumber value
-    unless valid_int
-      return false, int_validator
-    true
-
-validators.tableshape = ->
-  (value) ->
-    error "Not implemented"
+    int_validator tonumber value
 
 validators
