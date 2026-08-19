@@ -298,3 +298,16 @@ describe "validators.lua", ->
     it "should return false when called with 'foo'", ->
       result = ipv4_validator "foo"
       assert.is_false result
+
+  describe "port()", ->
+    local port_validator
+    before_each ->
+      port_validator = validators.port!
+
+    it "should return true when called with '8080'", ->
+      result = port_validator "8080"
+      assert.is_true result
+
+    it "should return true when called with 8080", ->
+      result = port_validator 8080
+      assert.is_true result
