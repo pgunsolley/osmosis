@@ -181,6 +181,34 @@ describe "validators.lua", ->
       result = string_validator true
       assert.is_false result
 
+  describe "string() with min_length: 3", ->
+    local string_validator
+    before_each ->
+      string_validator = validators.string
+        min_length: 3
+
+    it "should return true when called with 'foo'", ->
+      result = string_validator "foo"
+      assert.is_true result
+
+    it "should return false when called with 'fo'", ->
+      result = string_validator "fo"
+      assert.is_false result
+
+  describe "string() with max_length: 3", ->
+    local string_validator
+    before_each ->
+      string_validator = validators.string
+        max_length: 3
+
+    it "should return true when called with 'foo'", ->
+      result = string_validator "foo"
+      assert.is_true result
+
+    it "should return false when called with 'foob'", ->
+      result = string_validator "foob"
+      assert.is_false result
+
   describe "email() with no arguments", ->
     local email_validator
     before_each ->
@@ -221,3 +249,12 @@ describe "validators.lua", ->
     it "should return false when called with 'foobar.com'", ->
       result = email_validator "foobar.com"
       assert.is_false result
+
+  describe "password() with no arguments", ->
+    local password_validator
+    before_each ->
+      password_validator = validators.password!
+
+    it "should return true when called with 'foobar'", ->
+      result = password_validator "foobar"
+      assert.is_true result
