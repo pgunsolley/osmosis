@@ -30,8 +30,8 @@ validators.number = ({ :signed, :min_length, :max_length } = {}) ->
 validators.int = ({ :signed, :min_length, :max_length } = {}) ->
   number_validator = validators.number
     :signed
-    min_length: math.floor min_length
-    max_length: math.floor max_length
+    min_length: type(min_length) == "number" and math.floor(min_length) or nil
+    max_length: type(max_length) == "number" and math.floor(max_length) or nil
   (value) ->
     valid_number, number_validator_err = number_validator value
     unless valid_number
@@ -43,6 +43,7 @@ validators.int = ({ :signed, :min_length, :max_length } = {}) ->
 validators.id = ->
   int_validator = validators.int {
     signed: false
+    min_length: 1
     max_length: 2147483647
   }
   (value) ->
