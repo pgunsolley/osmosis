@@ -311,3 +311,19 @@ describe "validators.lua", ->
     it "should return true when called with 8080", ->
       result = port_validator 8080
       assert.is_true result
+
+    it "should return true when called with 0", ->
+      result = port_validator 0
+      assert.is_true result
+
+    it "should return false when called with -1", ->
+      result = port_validator -1
+      assert.is_false result
+
+    it "should return false when called with 65536", ->
+      result = port_validator 65536
+      assert.is_false result
+
+    it "should return false when called with 'foo'", ->
+      result = port_validator "foo"
+      assert.is_false result
