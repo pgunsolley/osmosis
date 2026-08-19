@@ -1,9 +1,6 @@
 return {
-  _all = {
-    coverage = true
-  },
   default = {
     verbose = true,
-    directory = "./spec/"
+    pattern = ".*%.moon$"
   }
 }

@@ -15,9 +15,9 @@
 
 validators = {}
 
-validators.number = ({ :signed, :min_length, :max_length }) ->
+validators.number = ({ :signed, :min_length, :max_length } = {}) ->
   (value) ->
-    unless (type(value) == "number"
+    unless type(value) == "number"
       return false, "Must be a number"
     if signed == false and value < 0
         return false, "Must not be signed"
@@ -25,8 +25,9 @@ validators.number = ({ :signed, :min_length, :max_length }) ->
       return false, "Must not be less than #{min_length}"
     if type(max_length) == "number" and value > max_length
       return false, "Must not be greater than #{max_length}"
+    true
 
-validators.int = ({ :signed, :min_length, :max_length }) ->
+validators.int = ({ :signed, :min_length, :max_length } = {}) ->
   number_validator = validators.number
     :signed
     min_length: math.floor min_length
@@ -47,7 +48,7 @@ validators.id = ->
   (value) ->
     int_validator value
 
-validators.string = ({ :min_length, :max_length }) ->
+validators.string = ({ :min_length, :max_length } = {}) ->
   (value) ->
     unless type(value) == "string"
       return false, "Must be a string"
@@ -58,7 +59,7 @@ validators.string = ({ :min_length, :max_length }) ->
       return false, "Must be fewer than #{max_length} characters"
     true
 
-validators.email = ({ :min_length, :max_length }) ->
+validators.email = ({ :min_length, :max_length } = {}) ->
   string_validator = validators.string
     min_length: min_length or 3
     max_length: max_length or 254
@@ -74,7 +75,7 @@ validators.email = ({ :min_length, :max_length }) ->
       return false, "Not a valid email"
     true
 
-validators.password = ({ :min_length, :max_length }) ->
+validators.password = ({ :min_length, :max_length } = {}) ->
   string_validator = validators.string
     min_length: min_length or 6
     max_length: max_length or 254
