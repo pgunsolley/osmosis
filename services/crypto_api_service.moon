@@ -13,10 +13,21 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
+validators = require "validators"
+
+ipv4_validator = validators.ipv4!
+port_validator = validators.port!
+
 CryptoApiService = {}
 
 CryptoApiService.create = ({ :http_service, :host, :port }) ->
-  -- TODO: Define validation for arguments
+  valid_ipv4, ipv4_validator_err = ipv4_validator host
+  unless valid_ipv4
+    error ipv4_validator_err
+
+  valid_port, port_validator_err = port_validator port
+  unless valid_port
+    error port_validator_err
 
   argon2_hash_encoded: ({ :value }) ->
     req =
