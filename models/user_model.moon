@@ -13,5 +13,9 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-import autoload from require "lapis.util"
-autoload "models"
+db = require "lapis.db"
+import Model from require "lapis.db.model"
+
+class UserModel extends Model
+
+{ :UserModel }

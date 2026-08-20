@@ -15,6 +15,15 @@
 
 import from_json from require "lapis.util"
 
+validators = require "validators"
+
+table_validator = validators.table!
+
+assert_table = (sub) ->
+  valid_table, table_validator_err = table_validator sub
+  unless valid_table
+    error table_validator_err
+
 body_parser = (body, headers) ->
   switch headers['Content-Type']
     when 'application/json'
@@ -23,11 +32,11 @@ body_parser = (body, headers) ->
 
 class HttpService
   new: ({ :resty_http }) =>
-    unless type(resty_http) == "table"
-      error "Invalid type for resty_http"
+    assert_table resty_http
     @resty_http = resty_http
 
   handle_request: ({ :req }) =>
+    assert_table req
     body, status, headers = @resty_http.request req
     body = body_parser body, headers
     { :body, :status, :headers }

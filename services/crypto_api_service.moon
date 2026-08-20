@@ -25,7 +25,7 @@ port_validator = validators.port!
 class CryptoApiService
   new: ({ :http_service, :host, :port }) =>
     unless is_instance_of http_service, HttpService
-      error "Must be instance of HttpService"
+      error "Value for http_service is not an instance of HttpService"
 
     valid_ipv4, ipv4_validator_err = ipv4_validator host
     unless valid_ipv4

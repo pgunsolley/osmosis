@@ -24,34 +24,33 @@ with container
       __index: (t, k) ->
         c[k] or error "config key #{k} is not set"
 
-  .put "models", -> require "models"
+  .put "UserModel", ->
+    import UserModel from require "models.user_model"
+    UserModel
 
-  .put "http_service", ->
+  .put "HttpService", ->
+    import HttpService from require "services.http_service"
     resty_http = require "lapis.nginx.resty_http"
-    HttpService = require "services.http_service"
-    HttpService.create {
+    HttpService {
       :resty_http
     }
 
-  .put "crypto_api_service",
-    (config, http_service) ->
-      host = config.crypto_host
-      port = config.crypto_port
-      CryptoApiService = require "services.crypto_api_service"
-      CryptoApiService.create {
-        :http_service
-        :host
-        :port
-      },
-    { "config", "http_service" }
+  .put "CryptoApiService", (config, http_service) ->
+    import CryptoApiService from require "services.crypto_api_service"
+    host = config.crypto_host
+    port = config.crypto_port
+    CryptoApiService {
+      :http_service
+      :host
+      :port
+    },
+    { "config", "HttpService" }
 
-  .put "user_service",
-    (models) ->
-      import Users from models
-      UserService = require "services.user_service"
-      UserService.create {
-        :Users
-      },
-    { "models" }
+  .put "UserService", (UserModel) ->
+    import UserService from require "services.user_service"
+    UserService {
+      :UserModel
+    },
+    { "UserModel" }
 
 container
