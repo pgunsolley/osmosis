@@ -24,7 +24,7 @@ id_validator = validators.id!
 
 class UserService
   new: ({ :UserModel }) =>
-    unless user_model.UserModel = UserModel
+    unless user_model.UserModel == UserModel
       error "Argument for UserModel is not the UserModel"
     @UserModel = UserModel
 
