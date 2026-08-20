@@ -40,6 +40,12 @@ validators.int = ({ :signed, :min_length, :max_length } = {}) ->
       return false, "Must be an integer"
     true
 
+validators.table = ->
+  (value) ->
+    unless type(value) == "table"
+      return false, "Must be a table"
+    true
+
 validators.id = ->
   int_validator = validators.int {
     signed: false

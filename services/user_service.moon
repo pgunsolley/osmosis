@@ -13,30 +13,36 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
+import Users from require "models.users"
+import is_instance_of from require "moon"
+
 validators = require "validators"
 
 email_validator = validators.email!
 password_validator = validators.password!
 id_validator = validators.id!
 
-UserService = {}
+class UserService
+  new: ({ :users_model }) =>
+    unless is_instance_of users_model, Users
+      error "users_model must be an instance of Users"
+    @Users = users_model
 
-UserService.create = ({ :Users }) ->
-  create: ({ :email, :password }) ->
+  create: ({ :email, :password }) =>
     valid_email, email_validator_err = email_validator email
     unless valid_email
       return valid_email, email_validator_err
     valid_password, password_validator_err = password_validator password
     unless password_valid
       return valid_password, password_validator_err
-    Users\create
+    @Users\create
       :email
       :password
-
-  get: ({ :id }) ->
+  
+  get: ({ :id }) =>
     valid_id, id_validator_err = id_validator id
     unless valid_id
       return valid_id, id_validator_err
-    Users\find :id
+    @Users\find :id
 
-UserService
+{ :UserService }

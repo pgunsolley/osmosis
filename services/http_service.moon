@@ -15,20 +15,21 @@
 
 import from_json from require "lapis.util"
 
--- Attempts to parse body into table or returns string body
 body_parser = (body, headers) ->
   switch headers['Content-Type']
     when 'application/json'
       from_json body
-    else body
+    else error "Unable to parse body"
 
-HttpService = {}
+class HttpService
+  new: ({ :resty_http }) =>
+    unless type(resty_http) == "table"
+      error "Invalid type for resty_http"
+    @resty_http = resty_http
 
--- Wrap lapis.nginx.resty_http
-HttpService.create = ({ :resty_http }) ->
-  request: ({ :req }) ->
-    body, status, headers = resty_http.request req
+  handle_request: ({ :req }) =>
+    body, status, headers = @resty_http.request req
     body = body_parser body, headers
     { :body, :status, :headers }
 
-HttpService
+{ :HttpService }

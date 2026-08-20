@@ -150,6 +150,19 @@ describe "validators.lua", ->
       result = int_validator 41
       assert.is_false result
 
+  describe "table()", ->
+    local table_validator
+    before_each ->
+      table_validator = validators.table!
+
+    it "should return true when called with {}", ->
+      result = table_validator {}
+      assert.is_true result
+
+    it "should return false when called with 1", ->
+      result = table_validator 1
+      assert.is_false result
+
   describe "id() with no arguments", ->
     local id_validator
     before_each ->
