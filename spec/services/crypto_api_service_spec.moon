@@ -13,8 +13,23 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
-CryptoApiService = require "services.crypto_api_service"
+import CryptoApiService from require "services.crypto_api_service"
+import HttpService from require "services.http_service"
 
-describe "crypto_api_service.moon", ->
-  describe "create()", ->
-    pending "should return an initialized CryptoApiService", ->
+describe "CryptoApiService", ->
+  local crypto_api_service
+  before_each ->
+    host = "127.0.0.1"
+    port = "8000"
+    resty_http_mock = mock({}, true)
+    http_service_mock = mock(HttpService(resty_http: resty_http_mock), true)
+    crypto_api_service = CryptoApiService
+      http_service: http_service_mock
+      :host
+      :port
+
+  describe "argon2_hash_encoded()", ->
+    it "should call http_service.request once with value: 'foo'", ->
+      crypto_api_service.argon2_hash_encoded
+        value: "foo"
+

@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU Affero General Public License
 -- along with this program.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
 
+import to_json from require "lapis.util"
 validators = require "validators"
 import HttpService from require "services.http_service"
 import is_instance_of from require "moon"
@@ -50,7 +51,7 @@ class CryptoApiService
         ["Content-Type"]: 'application/json'
         Accept: 'application/json'
       url: "#{@host}:#{@port}/argon2/hash-encoded"
-      body: :value
+      body: to_json :value
 
     res = @http_service.request req
     unless res.status == 200
